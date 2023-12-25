@@ -68,7 +68,7 @@ def main(
     tokenizer_path: str,
     temperature: float = 0.8,
     top_p: float = 0.95,
-    max_seq_len: int = 512,
+    max_seq_len: int = 4096,
     max_batch_size: int = 32,
 ):
     local_rank, world_size = setup_model_parallel()
@@ -106,12 +106,24 @@ plush girafe => girafe peluche
 
 cheese =>""",
     ]
+
     results = generator.generate(
-        prompts, max_gen_len=256, temperature=temperature, top_p=top_p
+        prompts, max_gen_len=1, temperature=temperature, top_p=top_p
     )
 
+    for i in [1]:  #, 2, 4, 8]: 
+        for j in [1]:
+            prompts = ["hi " * 2048] * i
+    
+            start_time = time.time()
+
+            results = generator.generate(
+                prompts, max_gen_len=j, temperature=temperature, top_p=top_p
+            )
+            print(f"generation in {time.time() - start_time:.2f} seconds")
+
     for result in results:
-        print(result)
+        # print(result)
         print("\n==================================\n")
 
 
